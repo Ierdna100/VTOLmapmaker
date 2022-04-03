@@ -86,4 +86,3 @@ for(let idx = 0; idx <= pixels; idx++) {
 }
 
 console.log(compilingPlan)
-fs.writeFileSync("./output2", compilingPlan.toString())
