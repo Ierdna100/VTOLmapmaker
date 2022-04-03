@@ -37,7 +37,7 @@ let yllcorner = arraysToCompile[3].slice(AAIGRID_OFFSET) // bottom left corner Y
 let cellsize = arraysToCompile[4].slice(AAIGRID_OFFSET) // length of a cell in degrees
 let NODATA_value = arraysToCompile[5].slice(AAIGRID_OFFSET) // value that appears in the data array if there is no value to be shown
 
-console.log(`${ncols}, ${nrows}, ${xllcorner}, ${yllcorner}, ${cellsize}, ${NODATA_value}`)
+//console.log(`${ncols}, ${nrows}, ${xllcorner}, ${yllcorner}, ${cellsize}, ${NODATA_value}`)
 
 let scaledArrayToCompile = []
 
@@ -60,17 +60,15 @@ arraysToCompile.forEach((val, idx) => {
 const SRTMGL3_RESOLUTION_METERS = 90
 const LENGTH_OF_PIXEL = 153
 
-console.log(scaledArrayToCompile)
-
-//let pixels = Math.ceil((scaledArrayToCompile.length * SRTMGL3_RESOLUTION_METERS) / LENGTH_OF_PIXEL)
-let pixels = 1281
+let pixels = Math.ceil((scaledArrayToCompile.length * SRTMGL3_RESOLUTION_METERS) / LENGTH_OF_PIXEL)
+//let pixels = 1281
 let chunks = pixels / 20
 
 let compilingPlan = []
 let distanceCompiled = 0
 let previousDistanceCompiled = 0
 let dataPointsCompiled = 0
-let totalDataPoints = scaledArrayToCompile.length
+//let totalDataPoints = scaledArrayToCompile.length
 
 for(let idx = 0; idx <= pixels; idx++) {
     distanceToCompile = (LENGTH_OF_PIXEL * (idx + 1)) - distanceCompiled
@@ -85,4 +83,32 @@ for(let idx = 0; idx <= pixels; idx++) {
     previousDistanceCompiled = distanceCompiled
 }
 
-console.log(compilingPlan)
+let dataPointsCompiledX = 0
+let dataPointsCompiledY = 0
+let map = []
+
+for(let idxX = 0; idxX < pixels; idxX++) {
+    let finalZValue = 0
+    let finalZArray = []
+    dataPointsCompiledX = 0
+    for(let idxY = 0; idxY < pixels; idxY++) {
+        dataPointsToCompile = compilingPlan[idxY]
+
+        let averageSum = 0
+
+        for(let idxDPX = 0; idxDPX < dataPointsToCompile; idxDPX++) {
+            averageSum += scaledArrayToCompile[idxDPX + dataPointsCompiledX]
+        }
+        for(let idxDPY = 0; idxDPY < dataPointsToCompile; idxDPY++) {
+            averageSum += scaledArrayToCompile[idxDPY + dataPointsCompiledY]
+        }
+
+        finalZValue = averageSum / (dataPointsToCompile ^ 2)
+
+        finalZArray[idxY] = finalZValue
+    }
+    map[idxX] = finalZArray
+    dataPointsCompiledY++
+}
+
+console.log(map)
