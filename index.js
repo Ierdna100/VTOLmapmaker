@@ -60,7 +60,7 @@ arraysToCompile.forEach((val, idx) => {
 const SRTMGL3_RESOLUTION_METERS = 90
 const LENGTH_OF_PIXEL = 153
 
-let pixels = Math.ceil((scaledArrayToCompile.length * SRTMGL3_RESOLUTION_METERS) / LENGTH_OF_PIXEL)
+let pixels = Math.floor((scaledArrayToCompile.length * SRTMGL3_RESOLUTION_METERS) / LENGTH_OF_PIXEL)
 //let pixels = 1281
 let chunks = pixels / 20
 
@@ -87,28 +87,33 @@ let dataPointsCompiledX = 0
 let dataPointsCompiledY = 0
 let map = []
 
-for(let idxX = 0; idxX < pixels; idxX++) {
+for(let idxX = 0; idxX < pixels - 1; idxX++) {
     let finalZValue = 0
     let finalZArray = []
     dataPointsCompiledX = 0
-    for(let idxY = 0; idxY < pixels; idxY++) {
+    for(let idxY = 0; idxY < pixels - 1; idxY++) {
         dataPointsToCompile = compilingPlan[idxY]
 
         let averageSum = 0
 
         for(let idxDPX = 0; idxDPX < dataPointsToCompile; idxDPX++) {
-            averageSum += scaledArrayToCompile[idxDPX + dataPointsCompiledX]
-        }
-        for(let idxDPY = 0; idxDPY < dataPointsToCompile; idxDPY++) {
-            averageSum += scaledArrayToCompile[idxDPY + dataPointsCompiledY]
+            for(let idxDPY = 0; idxDPY < dataPointsToCompile; idxDPY++) {
+                console.log(idxDPX)
+                console.log(dataPointsCompiledX)
+                console.log(idxDPY)
+                console.log(dataPointsCompiledY)
+                averageSum += scaledArrayToCompile[idxDPX + dataPointsCompiledX][idxDPY + dataPointsCompiledY]
+            }
+            dataPointsCompiledX++
         }
 
-        finalZValue = averageSum / (dataPointsToCompile ^ 2)
+        finalZValue = averageSum / (Math.pow(dataPointsToCompile, 2))
+        //console.log(finalZValue)
 
         finalZArray[idxY] = finalZValue
     }
     map[idxX] = finalZArray
-    dataPointsCompiledY++
+    dataPointsCompiledY += compilingPlan[idxX]
 }
 
 console.log(map)
