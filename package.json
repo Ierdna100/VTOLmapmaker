@@ -1,0 +1,16 @@
+{
+  "name": "vtolmapmaker",
+  "version": "0.0.1",
+  "description": "This project will allow users to generate heightmaps and road data for their VTOL VR maps!",
+  "main": "index.js",
+  "scripts": {
+    "run": "node index.js",
+    "test": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "nodemon": "^2.0.15"
+  }
+}
