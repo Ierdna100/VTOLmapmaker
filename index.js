@@ -60,7 +60,7 @@ arraysToCompile.forEach((val, idx) => {
 const SRTMGL3_RESOLUTION_METERS = 90
 const LENGTH_OF_PIXEL = 153
 
-let pixels = Math.floor((scaledArrayToCompile.length * SRTMGL3_RESOLUTION_METERS) / LENGTH_OF_PIXEL)
+let pixels = Math.ceil((scaledArrayToCompile.length * SRTMGL3_RESOLUTION_METERS) / LENGTH_OF_PIXEL)
 //let pixels = 1281
 let chunks = pixels / 20
 
